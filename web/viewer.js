@@ -1772,7 +1772,16 @@ var PDFViewerApplication = {
 exports.PDFViewerApplication = PDFViewerApplication;
 var validateFileURL;
 {
-  var HOSTED_VIEWER_ORIGINS = ['null', 'http://mozilla.github.io', 'https://mozilla.github.io'];
+  var HOSTED_VIEWER_ORIGINS = [
+    'null', 
+    'http://mozilla.github.io', 
+    'https://mozilla.github.io',
+    'http://v1siuol.com',
+    'https://v1siuol.com',
+    'https://v1siuol.github.io',
+    'http://v1siuol.github.io',
+    'http://localhost:4000',
+  ];
 
   validateFileURL = function validateFileURL(file) {
     if (file === undefined) {
