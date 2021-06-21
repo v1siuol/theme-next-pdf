@@ -2178,7 +2178,7 @@ let validateFileURL;
     'https://v1siuol.com',
     'https://v1siuol.github.io',
     'http://v1siuol.github.io',
-    'http://localhost',
+    'http://localhost:5000',
   ];
 
   validateFileURL = function (file) {
