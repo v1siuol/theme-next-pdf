@@ -2044,6 +2044,13 @@ class PDFDocumentProxy {
   constructor(pdfInfo, transport) {
     this._pdfInfo = pdfInfo;
     this._transport = transport;
+    Object.defineProperty(this, "fingerprint", {
+      get() {
+        (0, _display_utils.deprecated)("`PDFDocumentProxy.fingerprint`, " + "please use `PDFDocumentProxy.fingerprints` instead.");
+        return this.fingerprints[0];
+      }
+
+    });
   }
 
   get annotationStorage() {
@@ -2054,8 +2061,8 @@ class PDFDocumentProxy {
     return this._pdfInfo.numPages;
   }
 
-  get fingerprint() {
-    return this._pdfInfo.fingerprint;
+  get fingerprints() {
+    return this._pdfInfo.fingerprints;
   }
 
   get isPureXfa() {
@@ -2704,6 +2711,10 @@ class LoopbackPort {
 
   postMessage(obj, transfers) {
     function cloneValue(value) {
+      if (typeof value === "function" || typeof value === "symbol" || value instanceof URL) {
+        throw new Error(`LoopbackPort.postMessage - cannot clone: ${value?.toString()}`);
+      }
+
       if (typeof value !== "object" || value === null) {
         return value;
       }
@@ -2747,10 +2758,6 @@ class LoopbackPort {
         return result;
       }
 
-      if (value instanceof URL) {
-        throw new Error(`LoopbackPort.postMessage - cannot clone: ${value}`);
-      }
-
       result = Array.isArray(value) ? [] : Object.create(null);
       cloned.set(value, result);
 
@@ -2766,11 +2773,7 @@ class LoopbackPort {
           continue;
         }
 
-        if (typeof desc.value === "function") {
-          if (value.hasOwnProperty?.(i)) {
-            throw new Error(`LoopbackPort.postMessage - cannot clone: ${value[i]}`);
-          }
-
+        if (typeof desc.value === "function" && !value.hasOwnProperty?.(i)) {
           continue;
         }
 
@@ -3965,7 +3968,7 @@ const InternalRenderTask = function InternalRenderTaskClosure() {
 
 const version = '2.10.0';
 exports.version = version;
-const build = 'd7f8a0e';
+const build = '5c7cd6f';
 exports.build = build;
 
 /***/ }),
@@ -14738,7 +14741,7 @@ var _svg = __w_pdfjs_require__(20);
 var _xfa_layer = __w_pdfjs_require__(21);
 
 const pdfjsVersion = '2.10.0';
-const pdfjsBuild = 'd7f8a0e';
+const pdfjsBuild = '5c7cd6f';
 {
   if (_is_node.isNodeJS) {
     const {
