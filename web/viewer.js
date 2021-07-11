@@ -11324,6 +11324,7 @@ exports.DefaultAnnotationLayerFactory = DefaultAnnotationLayerFactory;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.fixupLangCode = fixupLangCode;
 exports.getL10nFallback = getL10nFallback;
 exports.NullL10n = void 0;
 const DEFAULT_L10N_STRINGS = {
@@ -11391,6 +11392,27 @@ function getL10nFallback(key, args) {
   }
 
   return DEFAULT_L10N_STRINGS[key] || "";
+}
+
+const PARTIAL_LANG_CODES = {
+  en: "en-US",
+  es: "es-ES",
+  fy: "fy-NL",
+  ga: "ga-IE",
+  gu: "gu-IN",
+  hi: "hi-IN",
+  hy: "hy-AM",
+  nb: "nb-NO",
+  ne: "ne-NP",
+  nn: "nn-NO",
+  pa: "pa-IN",
+  pt: "pt-PT",
+  sv: "sv-SE",
+  zh: "zh-CN"
+};
+
+function fixupLangCode(langCode) {
+  return PARTIAL_LANG_CODES[langCode?.toLowerCase()] || langCode;
 }
 
 function formatL10nValue(text, args) {
@@ -11842,6 +11864,11 @@ class PDFPageView {
     }
 
     this.textLayer = textLayer;
+
+    if (this.xfaLayer?.div) {
+      div.appendChild(this.xfaLayer.div);
+    }
+
     let renderContinueCallback = null;
 
     if (this.renderingQueue) {
@@ -13867,7 +13894,7 @@ class GenericL10n {
   constructor(lang) {
     this._lang = lang;
     this._ready = new Promise((resolve, reject) => {
-      webL10n.setLanguage(lang, () => {
+      webL10n.setLanguage((0, _l10n_utils.fixupLangCode)(lang), () => {
         resolve(webL10n);
       });
     });
@@ -15173,7 +15200,7 @@ var _app_options = __webpack_require__(1);
 var _app = __webpack_require__(3);
 
 const pdfjsVersion = '2.10.0';
-const pdfjsBuild = '5c7cd6f';
+const pdfjsBuild = 'd416b23';
 window.PDFViewerApplication = _app.PDFViewerApplication;
 window.PDFViewerApplicationOptions = _app_options.AppOptions;
 ;
